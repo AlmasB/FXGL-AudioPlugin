@@ -1,0 +1,5 @@
+include 'plugin-audio'
+include 'plugin-audio/desktop'
+include 'plugin-audio/android'
+
+rootProject.name = 'FXGL Audio Plugin'

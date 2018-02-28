@@ -1,0 +1,130 @@
+apply plugin: 'base'
+apply plugin: 'java'
+
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+        maven {
+            url 'http://nexus.gluonhq.com/nexus/content/repositories/releases'
+        }
+    }
+
+    dependencies {
+        classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.13.1'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.8'
+    }
+}
+
+group = 'com.github.almasb'
+version = '0.0.1-SNAPSHOT'
+
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+subprojects {
+    repositories {
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+        maven {
+            url "https://oss.sonatype.org/content/repositories/releases"
+        }
+        maven {
+            url 'http://nexus.gluonhq.com/nexus/content/repositories/releases'
+        }
+
+        jcenter()
+        mavenCentral()
+    }
+
+    if (project.name.endsWith("/android")) {
+        File androidMavenRepository = project.file("$ANDROID_HOME/extras/android/m2repository")
+        if (! androidMavenRepository.exists()) {
+            throw new GradleException("Unable to find Android repository at: " + androidMavenRepository)
+        }
+
+//        File googleMavenRepository = project.file("$ANDROID_HOME/extras/google/m2repository")
+//        if (! googleMavenRepository.exists()) {
+//            throw new GradleException("Unable to find Google repository at: " + googleMavenRepository)
+//        }
+        repositories {
+            maven {
+                url androidMavenRepository.toURI().toString()
+            }
+//            maven {
+//                url googleMavenRepository.toURI().toString()
+//            }
+        }
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'com.github.ben-manes.versions'
+    apply from: rootProject.file('mavenPublish.gradle')
+
+    group = rootProject.group
+    version = rootProject.version
+
+    if (name.endsWith("android")) {
+        archivesBaseName = 'fxgl-plugin-audio-android'
+    } else if (name.endsWith("desktop")) {
+        archivesBaseName = 'fxgl-plugin-audio-desktop'
+    } else {
+        archivesBaseName = 'fxgl-plugin-audio'
+    }
+
+    configurations {
+        published
+    }
+
+    dependencies {
+        compile 'com.gluonhq:charm-down-core:3.7.0'
+    }
+    
+    if (project.name.endsWith("/desktop")) {
+        dependencies {
+            compile project(":plugin-audio")
+        }
+    }
+
+    if (project.name.endsWith("/android")) {
+        apply from: '../../gradle/android-build.gradle'
+
+        dependencies {
+            compile project(":plugin-audio")
+            compile files("$ANDROID_HOME/platforms/android-$androidPlatformVersion/android.jar")
+            compile "org.javafxports:jfxdvk:$javafxportsVersion"
+            compile "com.android.support:support-v4:$androidSupportV4Version"
+        }
+
+        ext.description = 'API to access common features for the android platform'
+
+        project.afterEvaluate {
+            explodeAarDependencies(project, project.configurations.compile)
+        }
+    }
+
+    compileJava {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    task sourceJar(type: Jar) {
+        from sourceSets.main.allSource
+        classifier = 'sources'
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        from javadoc.destinationDir
+        classifier = 'javadoc'
+    }
+
+    artifacts {
+        archives sourceJar, javadocJar
+    }
+}
