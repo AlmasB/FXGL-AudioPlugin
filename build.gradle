@@ -84,6 +84,7 @@ subprojects {
 
     dependencies {
         compile 'com.gluonhq:charm-down-core:3.7.0'
+        compile 'com.gluonhq:charm-down-plugin-storage:3.7.0'
     }
     
     if (project.name.endsWith("/desktop")) {
