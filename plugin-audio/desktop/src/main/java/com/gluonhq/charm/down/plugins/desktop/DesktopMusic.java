@@ -1,17 +1,14 @@
-package com.gluonhq.impl.charm.down.plugins.android;
+package com.gluonhq.charm.down.plugins.desktop;
 
-import android.media.MediaPlayer;
 import com.gluonhq.impl.charm.down.plugins.Audio;
 import com.gluonhq.impl.charm.down.plugins.AudioType;
+import javafx.scene.media.MediaPlayer;
 
-/**
- * @author Almas Baimagambetov (almaslvl@gmail.com)
- */
-public final class AndroidMusic extends Audio {
+public class DesktopMusic extends Audio {
 
-    private MediaPlayer mediaPlayer;
+    private final MediaPlayer mediaPlayer;
 
-    public AndroidMusic(String fullName, MediaPlayer mediaPlayer) {
+    public DesktopMusic(String fullName, MediaPlayer mediaPlayer) {
         super(AudioType.MUSIC, fullName);
 
         this.mediaPlayer = mediaPlayer;
@@ -19,22 +16,22 @@ public final class AndroidMusic extends Audio {
 
     @Override
     public void setLooping(boolean looping) {
-        mediaPlayer.setLooping(looping);
+        mediaPlayer.setCycleCount(looping ? Integer.MAX_VALUE : 1);
     }
 
     @Override
     public void setVolume(double volume) {
-        mediaPlayer.setVolume((float)volume, (float)volume);
+        mediaPlayer.setVolume(volume);
     }
 
     @Override
     public void setOnFinished(Runnable action) {
-        mediaPlayer.setOnCompletionListener(player -> action.run());
+        mediaPlayer.setOnEndOfMedia(action);
     }
 
     @Override
     public void play() {
-        mediaPlayer.start();
+        mediaPlayer.play();
     }
 
     @Override
@@ -49,6 +46,6 @@ public final class AndroidMusic extends Audio {
 
     @Override
     public void dispose() {
-        mediaPlayer.release();
+        mediaPlayer.dispose();
     }
 }

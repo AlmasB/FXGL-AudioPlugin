@@ -1,59 +1,41 @@
 package com.gluonhq.impl.charm.down.plugins;
 
-import java.net.URL;
-
 /**
  * @author Almas Baimagambetov (almaslvl@gmail.com)
  */
 public abstract class Audio {
 
-    private static final Runnable NO_OP = () -> {};
+    private final AudioType type;
+    private final String fullName;
 
-    private int cycleCount = 1;
-    private Runnable onFinished = NO_OP;
-    private double volume = 1.0;
-    //private String fileName;
-    private final URL url;
-
-    public Audio(URL url) {
-        this.url = url;
+    public Audio(AudioType type, String fullName) {
+        this.type = type;
+        this.fullName = fullName;
     }
 
-    public int getCycleCount() {
-        return cycleCount;
+    public AudioType getType() {
+        return type;
     }
 
-    public void setCycleCount(int cycleCount) {
-        this.cycleCount = cycleCount;
+    public String getFullName() {
+        return fullName;
     }
 
-    public Runnable getOnFinished() {
-        return onFinished;
-    }
+    public abstract void setLooping(boolean looping);
 
-    public void setOnFinished(Runnable onFinished) {
-        this.onFinished = onFinished;
-    }
+    public abstract void setVolume(double volume);
 
-    public double getVolume() {
-        return volume;
-    }
-
-    public void setVolume(double volume) {
-        this.volume = volume;
-    }
-
-//    public String getFileName() {
-//        return fileName;
-//    }
-//
-//    public void setFileName(String fileName) {
-//        this.fileName = fileName;
-//    }
-
-    public URL getURL() {
-        return url;
-    }
+    public abstract void setOnFinished(Runnable action);
 
     public abstract void play();
+
+    public abstract void pause();
+
+    public abstract void stop();
+
+    /**
+     * Do NOT call directly.
+     * This is called automatically by the service managing this audio.
+     */
+    public abstract void dispose();
 }
