@@ -1,13 +1,13 @@
-package com.gluonhq.impl.charm.down.plugins.android;
+package com.gluonhq.charm.down.plugins.android.audio;
 
 import android.media.SoundPool;
-import com.gluonhq.impl.charm.down.plugins.Audio;
-import com.gluonhq.impl.charm.down.plugins.AudioType;
+import com.gluonhq.charm.down.plugins.audio.Audio;
+import com.gluonhq.charm.down.plugins.audio.AudioType;
 
 /**
  * @author Almas Baimagambetov (almaslvl@gmail.com)
  */
-public class AndroidSound extends Audio {
+public final class AndroidSound extends Audio {
 
     private final SoundPool pool;
     private final int soundID;

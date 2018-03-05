@@ -1,10 +1,10 @@
-package com.gluonhq.charm.down.plugins.desktop;
+package com.gluonhq.charm.down.plugins.desktop.audio;
 
-import com.gluonhq.impl.charm.down.plugins.Audio;
-import com.gluonhq.impl.charm.down.plugins.AudioType;
+import com.gluonhq.charm.down.plugins.audio.Audio;
+import com.gluonhq.charm.down.plugins.audio.AudioType;
 import javafx.scene.media.AudioClip;
 
-public class DesktopSound extends Audio {
+public final class DesktopSound extends Audio {
 
     private final AudioClip clip;
 

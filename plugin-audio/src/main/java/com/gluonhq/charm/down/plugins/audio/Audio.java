@@ -1,4 +1,4 @@
-package com.gluonhq.impl.charm.down.plugins;
+package com.gluonhq.charm.down.plugins.audio;
 
 /**
  * @author Almas Baimagambetov (almaslvl@gmail.com)
@@ -6,19 +6,19 @@ package com.gluonhq.impl.charm.down.plugins;
 public abstract class Audio {
 
     private final AudioType type;
-    private final String fullName;
+    private final String resourceName;
 
-    public Audio(AudioType type, String fullName) {
+    public Audio(AudioType type, String resourceName) {
         this.type = type;
-        this.fullName = fullName;
+        this.resourceName = resourceName;
     }
 
     public AudioType getType() {
         return type;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getResourceName() {
+        return resourceName;
     }
 
     public abstract void setLooping(boolean looping);

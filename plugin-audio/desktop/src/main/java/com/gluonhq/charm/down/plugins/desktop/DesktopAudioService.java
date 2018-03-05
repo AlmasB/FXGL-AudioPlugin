@@ -1,47 +1,27 @@
 package com.gluonhq.charm.down.plugins.desktop;
 
-import com.gluonhq.impl.charm.down.plugins.Audio;
-import com.gluonhq.charm.down.plugins.AudioService;
-import com.gluonhq.impl.charm.down.plugins.AudioType;
+import com.gluonhq.charm.down.plugins.audio.Audio;
+import com.gluonhq.charm.down.plugins.audio.AudioType;
+import com.gluonhq.charm.down.plugins.desktop.audio.DesktopMusic;
+import com.gluonhq.charm.down.plugins.desktop.audio.DesktopSound;
+import com.gluonhq.impl.charm.down.plugins.DefaultAudioService;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author Almas Baimagambetov (almaslvl@gmail.com)
  */
-public class DesktopAudioService implements AudioService {
-
-    private Map<String, Audio> cache = new HashMap<>();
+public final class DesktopAudioService extends DefaultAudioService {
 
     @Override
-    public Audio createAudio(AudioType type, String resourceName) {
-        if (cache.containsKey(resourceName)) {
-            return cache.get(resourceName);
-        }
-
-        Audio audio;
+    protected Audio loadAudioImpl(AudioType type, String resourceName) {
+        String url = getClass().getResource(resourceName).toExternalForm();
 
         if (type == AudioType.MUSIC) {
-            Media media = new Media(getClass().getResource(resourceName).toExternalForm());
-            MediaPlayer mediaPlayer = new MediaPlayer(media);
-
-            audio = new DesktopMusic(resourceName, mediaPlayer);
+            return new DesktopMusic(resourceName, new MediaPlayer(new Media(url)));
         } else {
-            audio = new DesktopSound(resourceName, new AudioClip(getClass().getResource(resourceName).toExternalForm()));
+            return new DesktopSound(resourceName, new AudioClip(url));
         }
-
-        cache.put(resourceName, audio);
-
-        return audio;
-    }
-
-    @Override
-    public void releaseAudio(Audio audio) {
-        cache.remove(audio.getFullName());
-        audio.dispose();
     }
 }

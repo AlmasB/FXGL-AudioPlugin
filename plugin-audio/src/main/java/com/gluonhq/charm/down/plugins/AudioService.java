@@ -1,16 +1,14 @@
 package com.gluonhq.charm.down.plugins;
 
-import com.gluonhq.impl.charm.down.plugins.Audio;
-import com.gluonhq.impl.charm.down.plugins.AudioType;
-
-import java.net.URL;
+import com.gluonhq.charm.down.plugins.audio.Audio;
+import com.gluonhq.charm.down.plugins.audio.AudioType;
 
 /**
  * @author Almas Baimagambetov (almaslvl@gmail.com)
  */
 public interface AudioService {
 
-    Audio createAudio(AudioType type, String resourceName);
+    Audio loadAudio(AudioType type, String resourceName);
 
-    void releaseAudio(Audio audio);
+    void unloadAudio(Audio audio);
 }
