@@ -24,6 +24,8 @@ uploadPublished {
         // configure repositories in a doFirst so we can late bind the properties
         repositories {
             mavenDeployer {
+                // for releases - https://oss.sonatype.org/service/local/staging/deploy/maven2/
+                // for snapshots - https://oss.sonatype.org/content/repositories/snapshots/
                 def repositoryUrl = getStringProperty('repositoryUrl', 'https://oss.sonatype.org/content/repositories/snapshots/')
                 def repositoryUsername = getStringPropertyDefaultAsProperty('repositoryUsername', 'sonatypeUsername')
                 def repositoryPassword = getStringPropertyDefaultAsProperty('repositoryPassword', 'sonatypePassword')
